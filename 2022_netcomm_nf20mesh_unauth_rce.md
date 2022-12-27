@@ -14,7 +14,7 @@ Netcomm produce routers for residential and small business use. At the time of w
 
 Noticing that a new model had been released, I had to know if a previous 0day of mine still worked against it. Aftering promptly ordering the new model, I was quickly saddened to see that two of my bugs didn't work.
 
-Reading through the firmware release notes, it didn't appear that my previous bugs had been found, so I was curious to know why it didn't affect it. As I was stepping through each part of the exploit chain, I noticed that some of the previous functionality I had previously abused to land my original shell has now been retired or removed.
+Reading through the firmware release notes, it didn't appear that my previous bugs had been found, so I was curious to know why it didn't affect it. As I was stepping through each part of the exploit chain, I noticed that some of the previous functionality I had previously abused to land my original shell had now been retired or removed.
 
 I wanted to try and find another RCE, so I downloaded the latest firmware to try and pull out the filesystem. Unfortunately, all of the newer firmware releases were now provided in an encrypted format.
 
@@ -68,9 +68,9 @@ Playing around with the `strstr()` function, I was able to trick the application
 
 ![static_check](images/burp_req2.png)
 
-I'm not 100% sure as to why the extension check was written this way, but I think this is a work around for serving static content while putting everything behind authentication. In order to serve a background image for the a login page, it sets the request as being in an authenticated state to be able to successfully fetch the resource.
+I'm not 100% sure as to why the extension check was written this way, but I think this is a work around for serving static content while putting everything behind authentication. In order to serve a background image for the login page, it sets the request as being in an authenticated state to be able to successfully fetch the resource.
 
-Additionally, I noticed there is a strange unauthenticated `/twgjtelnetopen.cmd` route which, while returns a 404 error page, is opening up the telnet service:
+Additionally, I noticed there is a strange unauthenticated `/twgjtelnetopen.cmd` route which, while returning a 404 error page, is opening up the telnet service:
 
 ![telnetd_route](images/telnetd_route.png)
 
@@ -79,9 +79,9 @@ Perhaps some kind of debug/tech support endpoint?
 
 ### **2. Buffer Overflow:**
 
-The second step was trying to find an alternative method on getting code execution on the device. 
+The second step was trying to find an alternative method for getting code execution on the device. 
 
-Using `checksec`, I could see the `httpd` binary has been compiled with a non-executable stack (`NX`), however other exploit mitigations had not been enabled:
+Using `checksec`, I could see the `httpd` binary had been compiled with a non-executable stack (`NX`), however other exploit mitigations had not been enabled:
 
 ```
 gdb-peda$ checksec
@@ -98,7 +98,7 @@ PIE       : disabled
 RELRO     : Partial
 ```
 
-I looked for cross-references for any `system()` calls that I might be able to hit however was unable to find anything that looked injectable. I started then looking for any cases of dangerous functions being used that might be exploitable. Fortunately, I was able to find quite a few instances of `strcpy` being used:
+I looked for cross-references to any `system()` calls that I might be able to hit, however was unable to find anything that looked injectable. I then looked for any cases of dangerous functions being used that might be exploitable. Fortunately, I was able to find quite a few instances of `strcpy` being used:
 
 ![strcpy_symboltree](images/strcpy_symboltree.png)
 
@@ -119,9 +119,9 @@ r3 : 00000000  r2 : 00000000  r1 : 00000000  r0 : 00000001
 [...]
 ```
 
-I could also see that I had full control over the `r4`, `r5`, `r6`, `r7`, `r10` and `fp` registers at the time of the crash. But also, most importantly, I had full control over the `PC` register. Unfortunately with the `NX` stack protections enabled, I would need to build a ROP chain in order to get a shell.
+I could also see that I had full control over the `r4`, `r5`, `r6`, `r7`, `r10` and `fp` registers at the time of the crash. But, most importantly, I had full control over the `PC` register. Unfortunately with the `NX` stack protections enabled, I would need to build a ROP chain in order to get a shell.
 
-Looking through the crash, I noticed another issue which was that the memory pages for the binary are being loaded into address ranges containing null bytes:
+Looking through the crash I noticed another issue. The memory pages for the binary were being loaded into address ranges containing null bytes:
 
 ```
 Call Process maps
