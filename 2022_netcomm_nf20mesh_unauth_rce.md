@@ -14,7 +14,7 @@ Netcomm produce routers for residential and small business use. At the time of w
 
 Noticing that a new model had been released, I had to know if a previous 0day of mine still worked against it. Aftering promptly ordering the new model, I was quickly sadden to see that two of my bugs didn't work.
 
-Reading through the firmeware release notes, it didn't appear that my previous bugs had been found, so I was curious to know why it didn't affect it. As I was stepping through each step of the exploit chain out I noticed that some of the previous functionality I had abused to land my original shell had now been retired or removed.
+Reading through the firmware release notes, it didn't appear that my previous bugs had been found, so I was curious to know why it didn't affect it. As I was stepping through each step of the exploit chain out I noticed that some of the previous functionality I had abused to land my original shell had now been retired or removed.
 
 I wanted to try and find another RCE, and so I downloaded the latest firmware to try and pull out the filesystem. Unfortunately, all of the newer firmware releases were now provided in an encrypted format.
 
