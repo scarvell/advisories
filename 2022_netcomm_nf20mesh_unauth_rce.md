@@ -12,16 +12,16 @@ It's possible that other devices may also be affected.
 ## Overview
 Netcomm produce routers for residential and small business use. At the time of writing, the Netcomm NF20Mesh router is currently recommended by [Aussie Broadband](https://www.aussiebroadband.com.au/nbn-plans/nbn-modem/) when signing up for a new service with the number other Australian service providers and vendors starting to offer Netcomm routers. 
 
-Noticing that a new model had been released, I had to know if a previous 0day of mine still worked against it. Aftering promptly ordering the new model, I was quickly sadden to see that two of my bugs didn't work.
+Noticing that a new model had been released, I had to know if a previous 0day of mine still worked against it. Aftering promptly ordering the new model, I was quickly saddened to see that two of my bugs didn't work.
 
-Reading through the firmware release notes, it didn't appear that my previous bugs had been found, so I was curious to know why it didn't affect it. As I was stepping through each step of the exploit chain out I noticed that some of the previous functionality I had abused to land my original shell had now been retired or removed.
+Reading through the firmware release notes, it didn't appear that my previous bugs had been found, so I was curious to know why it didn't affect it. As I was stepping through each part of the exploit chain, I noticed that some of the previous functionality I had previously abused to land my original shell has now been retired or removed.
 
-I wanted to try and find another RCE, and so I downloaded the latest firmware to try and pull out the filesystem. Unfortunately, all of the newer firmware releases were now provided in an encrypted format.
+I wanted to try and find another RCE, so I downloaded the latest firmware to try and pull out the filesystem. Unfortunately, all of the newer firmware releases were now provided in an encrypted format.
 
 
 ## Initial Shell
 
-Not having the luxury of simply running `binwalk` to pull out the filesystem like I did last time, I started looking for an alternative method to getting access to the device's file system. I spent a fair bit of time trying to black box the web server, looking for `ping` utilities and other pages that might be shelling out for command injection bugs, arbitrary file reads that could leak file contents etc. 
+Not having the luxury of simply running `binwalk` to pull out the filesystem like I did last time, I started looking for an alternative method to gain access to the device's file system. I spent a fair bit of time trying to black box the web server, looking for `ping` utilities and other pages that might be shelling out for command injection bugs, arbitrary file reads that could leak file contents etc. 
  
 Failing to find any obvious low hanging vulnerabilities, I decided to try and get onto the board by soldering to a UART interface:
 
@@ -49,7 +49,7 @@ Having local shell access now allowed me to start looking for vulnerabilities. U
 
 While reverse engineering the `httpd` binary, I noticed the application was performing checks against the request file extensions using the `strstr()` function.
 
-If you're unfamiliar with the `strstr` function in C, `strstr` finds the first occurrence of a word/character within a string. So instead than checking if the file in the path ends with `.css`, `.png` etc, it's only checking if the presence of these values in the path is there:
+If you're unfamiliar with the `strstr` function in C, `strstr` finds the first occurrence of a word/character within a string. Rather than checking if the file in the path ends with `.css`, `.png` etc, it's only checking if the presence of these values in the path are there:
 
 ![static_check](images/check_static_content.png)
 
