@@ -131,7 +131,7 @@ Call Process maps
 [...]
 ```
 
-This was a problem. Even though the application itself wasn't compiled with ASLR protection, I couldn't use any gadgets in it because the presence of a null byte would terminate the payload early. All the other libraries used by the application are using the system's ASLR which meant I was going to have to tackle the address randomization of the functions in libraries being used. 
+This was a problem. Even though the application itself wasn't compiled with ASLR protection, I couldn't use any gadgets in it because the presence of a null byte would terminate the payload early. All the other libraries used by the application were using the system's ASLR, which meant I was going to have to tackle the address randomization of the functions in libraries being used. 
 
 To help with getting a working exploit, I turned ASLR off on the router by running the following command:
 
@@ -139,7 +139,7 @@ To help with getting a working exploit, I turned ASLR off on the router by runni
 echo 0 > /proc/sys/kernel/randomize_va_space
 ```
 
-This provided a more stable environment to help with debugging the ROP chain by not having addresses changing on me while getting it to work. After getting an exploit working with ASLR turned off, I had to now go back and get it working with it enabled. Fortunately during the debugging process of the current exploit, I noticed hat the main application wasn't actually crashing. Instead, it was actually forking out a `httpd` service which processed the request and was crashing. Additionally the number of bytes in the address range changing was bruteforceable. I grabbed the base address of `libc` from a crash and calcuated where the addresses to functions would be. 
+This provided a more stable environment to help with debugging the ROP chain by not having addresses changing on me while getting it to work. After getting an exploit working with ASLR turned off, I had to now go back and get it working with it enabled. Fortunately during the debugging process of the current exploit, I noticed that the main application wasn't actually crashing. Instead, it was actually forking out a `httpd` service which processed the request and was crashing. Additionally, the number of bytes in the address range changing was brute forceable. I grabbed the base address of `libc` from a crash and calcuated where the addresses to functions would be. 
 
 Because the main process wasn't dying, I could keep issuing the same request in an infinite loop and see if I got lucky with `libc` being loaded again at the hardcoded base address by connecting to the telnet service:
 
