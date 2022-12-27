@@ -43,7 +43,7 @@ Finally, running the startup commands in `/etc/inittab` brought all the services
 
 ## Vulnerabilities
 
-Having local shell access now allowed me to start looking for vulnerabilities. Unauthenticated remote code execution requires the exploitation of two bugs; an authentication bypass and a stack-based buffer overflow vulnerability.
+Having local shell access now allowed me to start looking for vulnerabilities resulting an authentication bypass and a stack-based buffer overflow to achieve unauthenticated remote code execution.
 
 ### **1. Authentication Bypasss:**
 
