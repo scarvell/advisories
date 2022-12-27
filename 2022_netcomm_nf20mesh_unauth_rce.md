@@ -131,7 +131,7 @@ Call Process maps
 [...]
 ```
 
-This was a problem because even though the application itself wasn't compiled with ASLR protection, I couldn't use any gadgets in it because the presence of a null byte would terminate the payload early. All the other libraries used by the application are using the system's ASLR which meant I was going to have to tackle the address randomization of the functions in libraries being used. 
+This was a problem. Even though the application itself wasn't compiled with ASLR protection, I couldn't use any gadgets in it because the presence of a null byte would terminate the payload early. All the other libraries used by the application are using the system's ASLR which meant I was going to have to tackle the address randomization of the functions in libraries being used. 
 
 To help with getting a working exploit, I turned ASLR off on the router by running the following command:
 
