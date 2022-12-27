@@ -1,7 +1,7 @@
 # Netcomm - Unauthenticated Remote Code Execution (CVE Pending)
 
 ## Affected Devices:
-Research performed against the NF20MESH router running firmware versions prior to version `R6B021`. The following devices have been confirmed by the vendor to be vulnerable:
+Research performed against the NF20MESH router revealed an unauthenticated remote code execution vulnerability that affects devices running firmware prior to version `R6B021`. The following devices have been confirmed by the vendor to be vulnerable:
 
 - NF20
 - NF20MESH
