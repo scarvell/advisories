@@ -1,4 +1,6 @@
-# Netcomm - Unauthenticated Remote Code Execution (CVE Pending)
+# Netcomm - Unauthenticated Remote Code Execution
+- CVE-2022-4873
+- CVE-2022-4874
 
 ## Affected Devices:
 Research performed against the NF20MESH router revealed an unauthenticated remote code execution vulnerability that affects devices running firmware prior to version `R6B025`. The following devices have been confirmed by the vendor to be vulnerable:
@@ -45,7 +47,7 @@ Finally, running the startup commands in `/etc/inittab` brought all the services
 
 Having local shell access now allowed me to start looking for vulnerabilities resulting an authentication bypass and a stack-based buffer overflow to achieve unauthenticated remote code execution.
 
-### **1. Authentication Bypasss:**
+### **1. Authentication Bypasss (CVE-2022-4874):**
 
 While reverse engineering the `httpd` binary, I noticed the application was performing checks against the request file extensions using the `strstr()` function.
 
@@ -77,7 +79,7 @@ Additionally, I noticed there is a strange unauthenticated `/twgjtelnetopen.cmd`
 Perhaps some kind of debug/tech support endpoint? 
 
 
-### **2. Buffer Overflow:**
+### **2. Buffer Overflow (CVE-2022-4873):**
 
 The second step was trying to find an alternative method for getting code execution on the device. 
 
