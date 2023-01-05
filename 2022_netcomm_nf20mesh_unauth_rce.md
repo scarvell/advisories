@@ -249,3 +249,4 @@ while not pwned:
 - 03/12/22 - Requested update from MITRE for CVE.
 - 16/12/22 - Requested another update from MITRE regarding CVE.
 - 27/12/22 - Advisory disclosed. CVE still pending.
+- 04/01/23 - CVE-2022-4873 and CVE-2022-4874 assigned to bugs.
